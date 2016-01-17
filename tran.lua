@@ -76,7 +76,7 @@ end
 --(t2-b2)/(t1-b1)分3种情况:<1,1-2,>2
 --趋势分7种情况: b2>t1, b1+(t1-b1)/2 < b2 < t1, b1<b2<b1+(t1-b1)/2, b1+(t1-b1)/2<t2<t1,b1<t2<b1+(t1-b1)/2, t2<b1, t2>t1&b2<b1
 --转换结果为: 1,2,3,4,5,6,7,8,9,0,a,b,c,d,e,f,g,h,i,j,k
-function tran_trend(t1,b1,t2,b2)
+function tranTrend(t1,b1,t2,b2)
 	if type(t1) == 'string' then
 		t1 = tonumber(t1)
 	end
@@ -161,17 +161,33 @@ end
 
 local arr = loadCsvFile(arg[1])
 local t1,b1,t2,b2
+local history = {}
+local i = 1
 
+--field dim: 
+--2-date,5-open,6-high,7-low,8-close or
+--1-date,4-open,5-high,6-low,7-close
 for k1,v1 in ipairs(arr) do
 	if #v1 == 13 then
 		t1 = v1[6]
 		b1 = v1[7]
 		io.write('3')
+		history[i] = {v1[2],v1[5],v1[6],v1[7],v1[8],'3'}
 	else
 		t2 = v1[5]
 		b2 = v1[6]
-		io.write(tran_trend(t1,b1,t2,b2))
+		local state_char = tranTrend(t1,b1,t2,b2)
+		io.write(state_char)
 		t1 = t2
 		b1 = b2
+		history[i] = {v1[1],v1[4],v1[5],v1[6],v1[7],state_char}
 	end
+	i = i + 1
 end
+
+serialize('data/stock/history.txt', history)
+--[[
+for i=1,#history do
+	print(history[i][1],history[i][2],history[i][3],history[i][4],history[i][5],history[i][6])
+end
+]]--
