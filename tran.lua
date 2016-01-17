@@ -1,3 +1,5 @@
+require 'util/serialize'
+
 function split(str, reps)  
     local resultStrsList = {};  
     string.gsub(str, '[^' .. reps ..']+', function(w) table.insert(resultStrsList, w) end );  
