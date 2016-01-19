@@ -1,4 +1,4 @@
-require 'util/serialize'
+require 'torch'
 
 function split(str, reps)  
     local resultStrsList = {};  
@@ -172,7 +172,7 @@ for k1,v1 in ipairs(arr) do
 		t1 = v1[6]
 		b1 = v1[7]
 		io.write('3')
-		history[i] = {v1[2],v1[5],v1[6],v1[7],v1[8],'3'}
+		history[i] = {1,tonumber(v1[2]),tonumber(v1[5]),tonumber(v1[6]),tonumber(v1[7]),tonumber(v1[8]),'3'}
 	else
 		t2 = v1[5]
 		b2 = v1[6]
@@ -180,14 +180,9 @@ for k1,v1 in ipairs(arr) do
 		io.write(state_char)
 		t1 = t2
 		b1 = b2
-		history[i] = {v1[1],v1[4],v1[5],v1[6],v1[7],state_char}
+		history[i] = {0,tonumber(v1[1]),tonumber(v1[4]),tonumber(v1[5]),tonumber(v1[6]),tonumber(v1[7]),state_char}
 	end
 	i = i + 1
 end
 
-serialize('data/stock/history.txt', history)
---[[
-for i=1,#history do
-	print(history[i][1],history[i][2],history[i][3],history[i][4],history[i][5],history[i][6])
-end
-]]--
+torch.save('data/stock/history.t7', history)
